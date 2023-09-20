@@ -1,0 +1,82 @@
+{
+    "apis": [
+        {
+            "name": "Booking",
+            "description": "this api allows user to book orders",
+            "tags": [
+                "booking",
+                "order"
+            ],
+            "product": "order management",
+            "consumers": 200
+        },
+        {
+            "name": "Tracking",
+            "description": "provides latest information about an order like location & estimated time of arival",
+            "tags": [
+                "location",
+                "tracking"
+            ],
+            "product": "visibility",
+            "consumers": 2000
+        },
+        {
+            "name": "Vessels",
+            "description": "Provides information about vessel/ship schedules & route",
+            "tags": [
+                "vessels",
+                "route"
+            ],
+            "product": "fleet",
+            "consumers": 300
+        },
+        {
+            "name": "Route",
+            "description": "This api retrieves the detailed route of a given vessel/ship",
+            "tags": [
+                "route",
+                "navigation"
+            ],
+            "product": "order management",
+            "consumers": 100
+        },
+        {
+            "name": "Containers",
+            "description": "provides information about availability of containers at a giver terminal",
+            "tags": [
+                "containers",
+                "availability"
+            ],
+            "product": "order management",
+            "consumers": 20
+        },
+        {
+            "name": "Slots",
+            "description": "Provides information about available slots on a given vessel/ship",
+            "tags": [
+                "availability",
+                "slot"
+            ],
+            "product": "order management",
+            "consumers": 250
+        },
+        {
+            "name": "Employees",
+            "description": "Provides information about employees",
+            "tags": [
+                "employees"
+            ],
+            "product": "hr system",
+            "consumers": 5
+        },
+        {
+            "name": "Jhon's api",
+            "description": "Provides information about Jhon",
+            "tags": [
+                "employees"
+            ],
+            "product": "hr system",
+            "consumers": 5000
+        }
+    ]
+}
