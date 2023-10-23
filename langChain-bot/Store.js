@@ -8,6 +8,3 @@ export const getStoreConfig = (collectionName) => {
         }
     }
 }
-
-
-// module.exports = { getStoreConfig };
