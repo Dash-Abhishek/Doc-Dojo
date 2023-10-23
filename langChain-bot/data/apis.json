@@ -68,15 +68,6 @@
             ],
             "product": "hr system",
             "consumers": 5
-        },
-        {
-            "name": "Jhon's api",
-            "description": "Provides information about Jhon",
-            "tags": [
-                "employees"
-            ],
-            "product": "hr system",
-            "consumers": 5000
         }
     ]
 }

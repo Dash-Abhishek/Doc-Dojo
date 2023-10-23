@@ -44,7 +44,7 @@ export const ChatProcessor = {
             new DynamicTool({
                 name: "getAPIs",
                 description:
-                    "fetches list apis of a company, the data includes api name, description, product category, tags & consumer count.",
+                    "fetches list apis of a company, the data includes api name, description, product category, tags & consumer count. call this function with company name as argument",
                 func: GetApis,
             }),
 
