@@ -53,7 +53,7 @@ export const ChatProcessor = {
             agentType: "chat-conversational-react-description",
             verbose: true,
         });
-        const response = await executor.run({
+        const response = await executor.call({
             query: inputQuery,
         });
 
