@@ -1,7 +1,7 @@
 
-export const getStoreConfig = (collectionName) => {
+export const getStoreConfig = () => {
     return {
-        collectionName: collectionName,
+        collectionName: "collection-name",
         url: "http://0.0.0.0:8000", // Optional, will default to this value
         collectionMetadata: {
             "hnsw:space": "cosine",

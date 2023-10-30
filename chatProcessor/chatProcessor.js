@@ -4,13 +4,23 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { Chroma } from "langchain/vectorstores/chroma";
 import { initializeAgentExecutorWithOptions } from "langchain/agents";
 import { DynamicTool } from "langchain/tools";
+import { PromptTemplate } from "langchain/prompts";
 import { GetApis } from '../tools.js'
 
 
 export const ChatProcessor = {
 
 
+
     queryKnowledgeBase: async (inputQuery) => {
+
+        const template = `Use the following pieces of context to answer the question at the end.
+If you don't know the answer, just say that you don't know, don't try to make up an answer.
+Use three sentences maximum and keep the answer as concise as possible.
+Always say "thanks for asking!" at the end of the answer.
+{context}
+Question: {question}
+Helpful Answer:`;
 
         try {
             const model = new ChatOpenAI({ modelName: "gpt-3.5-turbo" });
@@ -18,11 +28,12 @@ export const ChatProcessor = {
             const vectorStore = await Chroma.fromExistingCollection(
                 new OpenAIEmbeddings(),
                 {
-                    collectionName: "a-test-collection",
+                    collectionName: "stargate",
                     url: "http://0.0.0.0:8000"
                 }
             );
-            const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever());
+            const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever(),
+                { prompt: PromptTemplate.fromTemplate(template), });
 
             const response = await chain.call({
                 query: inputQuery,

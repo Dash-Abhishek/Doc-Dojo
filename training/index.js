@@ -1,6 +1,9 @@
 import { Chroma } from "langchain/vectorstores/chroma";
 import { ProcessDoc } from './document.js';
 import { OpenAIEmbeddings } from "langchain/embeddings/openai"
+import { ChromaClient } from "chromadb";
+
+
 
 import { getStoreConfig } from '../store.js'
 
@@ -18,11 +21,27 @@ const prepareKnowledgeBase = async (docType, path) => {
 }
 
 
+const peekTrainingData = async () => {
+
+    const client = new ChromaClient({
+        path: "http://0.0.0.0:8000"
+    });
+    try {
+
+        const vectorStore = await client.getCollection({ name: "stargate" });
+        console.log(await vectorStore.peek())
+
+    } catch (err) {
+
+        console.log("failed to peek training data", err)
+    }
+}
 
 
 
 
-// prepareKnowledgeBase("file", "./ADA-FSD-Resume-v1.pdf")
-// queryKnowledgeBase("what all documents you have access to ?").then((res) => {
-//     console.log(res)
-// })
+
+
+// prepareKnowledgeBase("dir", "./data/Stargate-doc")
+
+// peekTrainingData()
