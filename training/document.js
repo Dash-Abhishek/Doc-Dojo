@@ -46,7 +46,7 @@ const dataLoaderFactory = (sourceType) => {
 
 const splitDoc = async (data) => {
     const textSplitter = new RecursiveCharacterTextSplitter({
-        chunkSize: 500,
+        chunkSize: 1000,
         chunkOverlap: 0,
     });
 

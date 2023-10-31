@@ -6,6 +6,7 @@ import { initializeAgentExecutorWithOptions } from "langchain/agents";
 import { DynamicTool } from "langchain/tools";
 import { PromptTemplate } from "langchain/prompts";
 import { GetApis } from '../tools.js'
+import config from "config"
 
 
 export const ChatProcessor = {
@@ -26,10 +27,12 @@ Helpful Answer:`;
             const model = new ChatOpenAI({ modelName: "gpt-3.5-turbo" });
 
             const vectorStore = await Chroma.fromExistingCollection(
-                new OpenAIEmbeddings(),
+                new OpenAIEmbeddings({
+                    openAIApiKey: process.env.OPENAI_API_KEY
+                }),
                 {
-                    collectionName: "stargate",
-                    url: "http://0.0.0.0:8000"
+                    collectionName: config.get("vectorStore.primaryCollection"),
+                    url: config.get("vectorStore.host"),
                 }
             );
             const chain = RetrievalQAChain.fromLLM(model, vectorStore.asRetriever(),

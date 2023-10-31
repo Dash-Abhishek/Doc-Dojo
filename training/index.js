@@ -2,34 +2,35 @@ import { Chroma } from "langchain/vectorstores/chroma";
 import { ProcessDoc } from './document.js';
 import { OpenAIEmbeddings } from "langchain/embeddings/openai"
 import { ChromaClient } from "chromadb";
-
-
-
+import config from "config"
 import { getStoreConfig } from '../store.js'
 
-const prepareKnowledgeBase = async (docType, path) => {
+
+const PrepareKnowledgeBase = async (docType, path) => {
 
     try {
         let processedData = await ProcessDoc(docType, path)
-        await Chroma.fromDocuments(
-            processedData, new OpenAIEmbeddings(), getStoreConfig());
+        // load process data to vector store
+        let embeddings = new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY })
+        let vectorStore = await Chroma.fromDocuments(processedData, embeddings, getStoreConfig());
+        console.log("successfully stored vector data", vectorStore.embeddings)
+        PeekTrainingData(vectorStore)
     } catch (err) {
-        console.log("failed to process doc", err)
+        console.log("failed to store vector data", err)
         return err
     }
 
 }
 
 
-const peekTrainingData = async () => {
+const PeekTrainingData = async () => {
 
     const client = new ChromaClient({
-        path: "http://0.0.0.0:8000"
+        path: config.get("vectorStore.host"),
     });
     try {
-
-        const vectorStore = await client.getCollection({ name: "stargate" });
-        console.log(await vectorStore.peek())
+        const collection = await client.getCollection({ name: config.get("vectorStore.primaryCollection") });
+        console.log((await collection.peek({ limit: 10 })))
 
     } catch (err) {
 
@@ -39,9 +40,23 @@ const peekTrainingData = async () => {
 
 
 
+const DeleteVectorData = async () => {
+
+    const client = new ChromaClient({
+        path: config.get("vectorStore.host"),
+    });
+    try {
+        await client.deleteCollection({ name: config.get("vectorStore.primaryCollection") });
+        console.log("successfully deleted vector data", config.get("vectorStore.primaryCollection"))
+
+    } catch (err) {
+        console.log("failed to delete vector collection:", err)
+    }
+}
 
 
+PrepareKnowledgeBase("dir", "./data/Stargate-doc")
 
-// prepareKnowledgeBase("dir", "./data/Stargate-doc")
+// DeleteVectorData()
 
-// peekTrainingData()
+// PeekTrainingData()
