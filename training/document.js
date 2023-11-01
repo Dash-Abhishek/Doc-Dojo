@@ -1,9 +1,10 @@
 // Document loader
 import { CheerioWebBaseLoader } from "langchain/document_loaders/web/cheerio"
 import { PDFLoader } from "langchain/document_loaders/fs/pdf"
+import { TextLoader } from "langchain/document_loaders/fs/text"
 import { DirectoryLoader } from "langchain/document_loaders/fs/directory";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter"
-import { load } from "cheerio";
+
 
 
 
@@ -24,6 +25,7 @@ const DirDataLoader = {
         const loader = new DirectoryLoader(path,
             {
                 ".pdf": (path) => new PDFLoader(path),
+                ".txt": (path) => new TextLoader(path),
             });
 
         let data = await loader.load();
@@ -35,8 +37,6 @@ const DirDataLoader = {
 const dataLoaderFactory = (sourceType) => {
 
     switch (sourceType) {
-        case "web":
-            return WebDataLoader;
         case "dir":
             return DirDataLoader;
         default:

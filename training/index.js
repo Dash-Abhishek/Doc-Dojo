@@ -55,7 +55,28 @@ const DeleteVectorData = async () => {
 }
 
 
-PrepareKnowledgeBase("dir", "./data/Stargate-doc")
+
+const main = async (command) => {
+    console.log(process.argv)
+    switch (command) {
+        case "prepare":
+            await PrepareKnowledgeBase("dir", process.env.DOCS_PATH)
+            break;
+        case "delete":
+            await DeleteVectorData()
+            break;
+        case "peek":
+            await PeekTrainingData()
+            break;
+        default:
+            console.log("invalid command")
+    }
+
+}
+main()
+
+
+// PrepareKnowledgeBase("dir", "./data/Stargate-doc")
 
 // DeleteVectorData()
 
