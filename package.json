@@ -5,7 +5,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "train": "node training/index.js"
+    "learn": "node dojo/index.js learn",
+    "unlearn": "node dojo/index.js unlearn",
+    "view": "node dojo/index.js view"
   },
   "author": "",
   "license": "ISC",

@@ -7,7 +7,9 @@ import { RecursiveCharacterTextSplitter } from "langchain/text_splitter"
 
 
 
-
+/**
+ * Web Data loader
+ */
 const WebDataLoader = {
 
     async loadDocuments(path) {
@@ -17,7 +19,9 @@ const WebDataLoader = {
     }
 
 }
-
+/**
+ * Directory Data loader 
+ */
 const DirDataLoader = {
 
     async loadDocuments(path) {
@@ -34,6 +38,11 @@ const DirDataLoader = {
 
 }
 
+/**
+ * Data loader factory
+ * @param {string} sourceType 
+ * @returns 
+ */
 const dataLoaderFactory = (sourceType) => {
 
     switch (sourceType) {
@@ -44,6 +53,11 @@ const dataLoaderFactory = (sourceType) => {
     }
 }
 
+/**
+ * Split documents into chunks
+ * @param {*} data 
+ * @returns 
+ */
 const splitDoc = async (data) => {
     const textSplitter = new RecursiveCharacterTextSplitter({
         chunkSize: 1000,
@@ -55,6 +69,12 @@ const splitDoc = async (data) => {
 
 }
 
+/**
+ * Process documents
+ * @param {string} sourceType 
+ * @param {string} path 
+ * @returns {*}
+ */
 export const ProcessDoc = async (sourceType, path) => {
 
     let loader = dataLoaderFactory(sourceType)

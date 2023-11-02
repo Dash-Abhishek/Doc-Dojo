@@ -5,7 +5,12 @@ import { ChromaClient } from "chromadb";
 import config from "config"
 import { getStoreConfig } from '../store.js'
 
-
+/**
+ * Process documents and store in vector store
+ * @param {string} docType 
+ * @param {string} path 
+ * @returns 
+ */
 const PrepareKnowledgeBase = async (docType, path) => {
 
     try {
@@ -13,16 +18,22 @@ const PrepareKnowledgeBase = async (docType, path) => {
         // load process data to vector store
         let embeddings = new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY })
         let vectorStore = await Chroma.fromDocuments(processedData, embeddings, getStoreConfig());
-        console.log("successfully stored vector data", vectorStore.embeddings)
+        console.log("training completed")
         PeekTrainingData(vectorStore)
     } catch (err) {
+        if (err.code && err.code === 'ENOENT') {
+            console.log("Provided path is not valid:", path)
+            return
+        }
         console.log("failed to store vector data", err)
         return err
     }
 
 }
 
-
+/**
+ * Peek training data
+ */
 const PeekTrainingData = async () => {
 
     const client = new ChromaClient({
@@ -30,7 +41,8 @@ const PeekTrainingData = async () => {
     });
     try {
         const collection = await client.getCollection({ name: config.get("vectorStore.primaryCollection") });
-        console.log((await collection.peek({ limit: 10 })))
+        let docIds = await collection.peek().then((res) => res.ids.map((id) => id))
+        console.log(docIds)
 
     } catch (err) {
 
@@ -39,15 +51,18 @@ const PeekTrainingData = async () => {
 }
 
 
-
-const DeleteVectorData = async () => {
+/**
+ * Delete knowledge base
+ * Deletes the primary collection
+ */
+const DeleteKnowledgeBase = async () => {
 
     const client = new ChromaClient({
         path: config.get("vectorStore.host"),
     });
     try {
         await client.deleteCollection({ name: config.get("vectorStore.primaryCollection") });
-        console.log("successfully deleted vector data", config.get("vectorStore.primaryCollection"))
+        console.log("successfully deleted vector data, primary collection:", config.get("vectorStore.primaryCollection"))
 
     } catch (err) {
         console.log("failed to delete vector collection:", err)
@@ -55,17 +70,26 @@ const DeleteVectorData = async () => {
 }
 
 
+/**
+ * Main function
+ * @returns 
+ */
+const main = async () => {
 
-const main = async (command) => {
-    console.log(process.argv)
-    switch (command) {
-        case "prepare":
-            await PrepareKnowledgeBase("dir", process.env.DOCS_PATH)
+    if (!process.env.OPENAI_API_KEY) {
+        console.log("OPENAI_API_KEY is not set")
+        return
+    }
+
+    let args = process.argv.slice(2)
+    switch (args[0]) {
+        case "learn":
+            await PrepareKnowledgeBase("dir", config.get("trainingDataPath"))
             break;
-        case "delete":
-            await DeleteVectorData()
+        case "unlearn":
+            await DeleteKnowledgeBase()
             break;
-        case "peek":
+        case 'view':
             await PeekTrainingData()
             break;
         default:
@@ -74,10 +98,3 @@ const main = async (command) => {
 
 }
 main()
-
-
-// PrepareKnowledgeBase("dir", "./data/Stargate-doc")
-
-// DeleteVectorData()
-
-// PeekTrainingData()
