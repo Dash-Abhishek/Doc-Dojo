@@ -11,7 +11,7 @@ export const ChatProcessor = {
     queryKnowledgeBase: async (inputQuery) => {
 
         const template = `Use the following pieces of context to answer the question at the end.
-If you don't know the answer, just say that you don't know, Do not try to make answer.
+If you do not have any context respond that you dont have an answer for it, do not make up any answer.
 {context}
 Question: {question}
 Helpful Answer:`;
@@ -29,7 +29,7 @@ Helpful Answer:`;
                 }
             );
             const chain = RunnableSequence.from([
-                {
+                {   
                     context: vectorStore.asRetriever().pipe(formatDocumentsAsString),
                     question: new RunnablePassthrough(),
                 },
