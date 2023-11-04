@@ -1,0 +1,19 @@
+version: "3.9" # Use the appropriate version of Docker Compose
+
+services:
+  chromaDB:
+    image: chromadb/chroma:latest
+    ports:
+      - "8000:8000"
+    container_name: chroma-vector-store
+
+  chat-server:
+    build:
+      context: .
+      # args:
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+
+    ports:
+      - "3000:3000"
+    container_name: chat-servre
