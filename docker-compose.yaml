@@ -12,12 +12,12 @@ services:
     networks:
       - darknet
   
-  
   chat-server:
     build:
       context: .
       # args:
     environment:
+      - NODE_CONFIG=${NODE_CONFIG}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
     ports:
       - "3000:3000"

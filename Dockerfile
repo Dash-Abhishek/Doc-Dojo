@@ -16,5 +16,8 @@ COPY . .
 # Expose port 3000 for the application
 EXPOSE 3000
 
+ENV NODE_CONFIG={$NODE_CONFIG}
+ENV OPENAI_API_KEY={$OPENAI_API_KEY}
+
 # Start the application
 CMD [ "npm", "start" ]
