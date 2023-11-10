@@ -37,6 +37,14 @@ Simple LLM bot platform built to learn from documents and answers questions rela
   "userMessage":"your question"
     }'
     ```
+
+* Deploy
+      
+    - Place all docs in txt or pdf format in data folder
+        
+    - Run
+
+          NODE_CONFIG='{"vectorStore":{"host":"http://chromaDB:8000"}}' OPENAI_API_KEY=<KEY> docker compose up -d
     
 ## License (MIT)
 Copyright (c) 2022 Abhishek Dash

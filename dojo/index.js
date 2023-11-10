@@ -11,14 +11,14 @@ import { getStoreConfig } from '../store.js'
  * @param {string} path 
  * @returns 
  */
-const PrepareKnowledgeBase = async (docType, path) => {
+export const PrepareKnowledgeBase = async (docType, path) => {
 
     try {
         let processedData = await ProcessDoc(docType, path)
         // load process data to vector store
         let embeddings = new OpenAIEmbeddings({ openAIApiKey: process.env.OPENAI_API_KEY })
         let vectorStore = await Chroma.fromDocuments(processedData, embeddings, getStoreConfig());
-        console.log("training completed")
+        console.log("Training completed !!")
         PeekTrainingData(vectorStore)
     } catch (err) {
         if (err.code && err.code === 'ENOENT') {
@@ -42,7 +42,7 @@ const PeekTrainingData = async () => {
     try {
         const collection = await client.getCollection({ name: config.get("vectorStore.primaryCollection") });
         let docIds = await collection.peek().then((res) => res.ids.map((id) => id))
-        console.log(docIds)
+        console.log("docs:",docIds)
 
     } catch (err) {
 

@@ -38,8 +38,8 @@ Helpful Answer:`;
                 new StringOutputParser()
             ])
 
-            const response = await chain.invoke(inputQuery);
-            return response
+            return await chain.invoke(inputQuery);
+            
         } catch (err) {
             console.log("failed to query", err)
             return err

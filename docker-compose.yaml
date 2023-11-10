@@ -22,5 +22,10 @@ services:
     ports:
       - "3000:3000"
     container_name: chat-server
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 50s
+      timeout: 10s
+      retries: 5
     networks:
       - darknet
